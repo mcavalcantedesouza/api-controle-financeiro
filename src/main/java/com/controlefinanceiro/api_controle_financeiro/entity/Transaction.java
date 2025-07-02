@@ -27,20 +27,20 @@ public class Transaction {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @Column(name = "descricao", nullable = false)
-    private String descricao;
+    @Column(name = "description", nullable = false)
+    private String description ;
 
-    @Column(name = "valor", nullable = false)
-    private BigDecimal valor;
+    @Column(name = "value", nullable = false)
+    private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = false)
-    private TransactionType tipo;
+    @Column(name = "valueType", nullable = false)
+    private TransactionType valueType;
 
-    @Column(name = "data", nullable = false)
-    private LocalDate data; // LocalDate é o tipo perfeito para colunas DATE do SQL.
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-    @Column(name = "data_criacao", updatable = false)
+    @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    private LocalDateTime dataCriacao;
+    private LocalDateTime createdAt;
 }
