@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "tbl_categories")
 @Data
 @NoArgsConstructor
-public class Category {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,8 @@ public class Category {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Transaction> transactions;
+    private Set<TransactionEntity> transactionEntities;
 }

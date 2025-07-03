@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "tbl_users")
 @Data
 @NoArgsConstructor
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +33,8 @@ public class User {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Category> categories;
+    private Set<CategoryEntity> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Transaction> transactions;
+    private Set<TransactionEntity> transactionEntities;
 }
