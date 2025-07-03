@@ -28,6 +28,6 @@ public class CategoryEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TransactionEntity> transactionEntities;
 }
