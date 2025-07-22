@@ -13,8 +13,8 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TransactionMapper {
 
-    @Mapping(source = "userEntity.id", target = "userId")
     @Mapping(source = "categoryEntity.id", target = "categoryId")
+    @Mapping(source = "categoryEntity.name", target = "categoryName")
     TransactionResponse toResponse(TransactionEntity entity);
 
     List<TransactionResponse> toResponseList(List<TransactionEntity> entities);
