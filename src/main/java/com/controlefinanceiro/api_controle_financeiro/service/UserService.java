@@ -1,5 +1,6 @@
 package com.controlefinanceiro.api_controle_financeiro.service;
 
+import com.controlefinanceiro.api_controle_financeiro.dto.request.UserCreatedRequest;
 import com.controlefinanceiro.api_controle_financeiro.dto.request.UserRequest;
 import com.controlefinanceiro.api_controle_financeiro.dto.response.UserResponse;
 import com.controlefinanceiro.api_controle_financeiro.entity.UserEntity;
@@ -33,6 +34,19 @@ public class UserService {
         userEntity.setHashPassword(encodedPassword);
 
         userEntity.setInitialBalance(BigDecimal.ZERO);
+
+        UserEntity savedUser = repository.save(userEntity);
+
+        return mapper.userEntityToUserResponse(savedUser);
+    }
+
+    @Transactional
+    public UserResponse updateUser(Integer id, UserCreatedRequest request) {
+
+        UserEntity userEntity = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        mapper.updateUserEntityFromUserRequest(request, userEntity);
 
         UserEntity savedUser = repository.save(userEntity);
 

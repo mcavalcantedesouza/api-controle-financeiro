@@ -2,8 +2,7 @@ package com.controlefinanceiro.api_controle_financeiro.entity;
 
 import com.controlefinanceiro.api_controle_financeiro.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,8 +10,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tbl_transactions")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = {"userEntity", "categoryEntity"})
+@EqualsAndHashCode(of = "id")
 public class TransactionEntity {
 
     @Id

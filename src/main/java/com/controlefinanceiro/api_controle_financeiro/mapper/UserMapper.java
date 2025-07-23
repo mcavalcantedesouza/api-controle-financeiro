@@ -1,5 +1,6 @@
 package com.controlefinanceiro.api_controle_financeiro.mapper;
 
+import com.controlefinanceiro.api_controle_financeiro.dto.request.UserCreatedRequest;
 import com.controlefinanceiro.api_controle_financeiro.dto.request.UserRequest;
 import com.controlefinanceiro.api_controle_financeiro.dto.response.UserResponse;
 import com.controlefinanceiro.api_controle_financeiro.entity.UserEntity;
@@ -23,7 +24,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "hashPassword", ignore = true)
-    void updateUserEntityFromUserRequest(UserRequest request, @MappingTarget UserEntity entity);
+    void updateUserEntityFromUserRequest(UserCreatedRequest request, @MappingTarget UserEntity entity);
 
     List<UserResponse> userEntityListToUserResponseList(List<UserEntity> entities);
 }

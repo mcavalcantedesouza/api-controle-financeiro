@@ -2,15 +2,17 @@ package com.controlefinanceiro.api_controle_financeiro.entity;
 
 import com.controlefinanceiro.api_controle_financeiro.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "tbl_categories")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = {"userEntity", "transactionEntities"})
+@EqualsAndHashCode(of = "id")
 public class CategoryEntity {
 
     @Id
