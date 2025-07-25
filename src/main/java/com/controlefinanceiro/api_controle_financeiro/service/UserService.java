@@ -52,4 +52,11 @@ public class UserService {
 
         return mapper.userEntityToUserResponse(savedUser);
     }
+
+    @Transactional
+    public UserResponse getUserById(Integer id) {
+        UserEntity userEntity = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        return mapper.userEntityToUserResponse(userEntity);
+    }
 }

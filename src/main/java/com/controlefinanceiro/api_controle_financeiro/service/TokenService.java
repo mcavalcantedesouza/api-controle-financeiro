@@ -28,6 +28,20 @@ public class TokenService {
                 .compact();
     }
 
+    public String getSubject(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (Exception e) {
+            // Você pode querer logar a exceção ou tratá-la de forma mais específica
+            throw new RuntimeException("Token JWT inválido ou expirado!", e);
+        }
+    }
+
     private SecretKey getSigningKey() {
 
         byte[] keyBytes = this.secret.getBytes(StandardCharsets.UTF_8);
