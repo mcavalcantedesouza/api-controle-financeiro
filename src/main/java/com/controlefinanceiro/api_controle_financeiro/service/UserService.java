@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -58,5 +59,10 @@ public class UserService {
         UserEntity userEntity = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
         return mapper.userEntityToUserResponse(userEntity);
+    }
+
+    @Transactional public List<UserResponse> getUsers() {
+        List<UserEntity> userEntities = repository.findAll();
+        return mapper.userEntityListToUserResponseList(userEntities);
     }
 }
