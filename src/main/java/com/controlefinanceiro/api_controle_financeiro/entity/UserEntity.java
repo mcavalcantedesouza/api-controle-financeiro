@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -48,10 +49,16 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<TransactionEntity> transactionEntities;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tbl_user_roles",
+               joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return Collections.emptyList();
+        return this.roles;
     }
 
     @Override
