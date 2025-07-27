@@ -20,15 +20,33 @@ public class UserController {
 
     private final UserService service;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createUser(request));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Integer id, @RequestBody @Valid UserCreatedRequest request) {
-        return ResponseEntity.ok(service.updateUser(id, request));
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        return ResponseEntity.ok(service.getCurrentUser());
     }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserResponse> updateCurrentUser(@RequestBody @Valid UserCreatedRequest request) {
+        return ResponseEntity.ok(service.updateCurrentUser(request));
+    }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteCurrentUser() {
+        service.deleteCurrentUser();
+        return ResponseEntity.noContent().build();
+    }
+
+    /*
+     * ===================================================================
+     *  Endpoints abaixo são para fins administrativos.
+     *  Implementar a checagem de role futuramente para esses endpoints
+     * ===================================================================
+     */
 
     @GetMapping()
     public ResponseEntity<List<UserResponse>> getUsers() {
@@ -38,6 +56,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.getUserById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        service.deleteUserById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

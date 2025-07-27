@@ -4,14 +4,16 @@ import com.controlefinanceiro.api_controle_financeiro.dto.request.UserCreatedReq
 import com.controlefinanceiro.api_controle_financeiro.dto.request.UserRequest;
 import com.controlefinanceiro.api_controle_financeiro.dto.response.UserResponse;
 import com.controlefinanceiro.api_controle_financeiro.entity.UserEntity;
+import com.controlefinanceiro.api_controle_financeiro.exception.EmailAlreadyExistsException;
 import com.controlefinanceiro.api_controle_financeiro.mapper.UserMapper;
 import com.controlefinanceiro.api_controle_financeiro.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -26,33 +28,62 @@ public class UserService {
     public UserResponse createUser(UserRequest request) {
 
         if (repository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email já cadastrado.");
+            throw new EmailAlreadyExistsException("O e-mail informado já está em uso");
         }
 
-        UserEntity userEntity = mapper.userRequestToUserEntity(request);
-
         String encodedPassword = passwordEncoder.encode(request.getPassword());
-        userEntity.setHashPassword(encodedPassword);
 
-        userEntity.setInitialBalance(BigDecimal.ZERO);
+        UserEntity userEntity = UserEntity.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .hashPassword(encodedPassword)
+                .build();
 
         UserEntity savedUser = repository.save(userEntity);
-
         return mapper.userEntityToUserResponse(savedUser);
     }
 
     @Transactional
-    public UserResponse updateUser(Integer id, UserCreatedRequest request) {
+    public UserResponse updateCurrentUser(UserCreatedRequest request) {
+        UserEntity currentUser = getAuthenticatedUser();
 
-        UserEntity userEntity = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+        if (request.getEmail() != null && !request.getEmail().equals(currentUser.getEmail())) {
+            if (repository.findByEmail(request.getEmail()).isPresent()) {
+                throw new EmailAlreadyExistsException("O e-mail informado já está em uso.");
+            }
+        }
 
-        mapper.updateUserEntityFromUserRequest(request, userEntity);
+        mapper.updateUserEntityFromUserRequest(request, currentUser);
+        UserEntity updatedUser = repository.save(currentUser);
 
-        UserEntity savedUser = repository.save(userEntity);
-
-        return mapper.userEntityToUserResponse(savedUser);
+        return mapper.userEntityToUserResponse(updatedUser);
     }
+
+    @Transactional(readOnly = true)
+    public UserResponse getCurrentUser() {
+        UserEntity currentUser = getAuthenticatedUser();
+        return mapper.userEntityToUserResponse(currentUser);
+    }
+
+    @Transactional
+    public void deleteCurrentUser() {
+        UserEntity currentUser = getAuthenticatedUser();
+        repository.delete(currentUser);
+    }
+
+    private UserEntity getAuthenticatedUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserEntity) {
+            return (UserEntity) principal;
+        }
+
+        String username = (String) principal;
+        return repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
+    }
+
+    /* Métodos para usuários com perfil de ADMIN */
 
     @Transactional
     public UserResponse getUserById(Integer id) {
@@ -61,8 +92,16 @@ public class UserService {
         return mapper.userEntityToUserResponse(userEntity);
     }
 
-    @Transactional public List<UserResponse> getUsers() {
+    @Transactional
+    public List<UserResponse> getUsers() {
         List<UserEntity> userEntities = repository.findAll();
         return mapper.userEntityListToUserResponseList(userEntities);
     }
+
+    @Transactional
+    public void deleteUserById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    /* Fim dos métodos para usuários com perfil de ADMIN */
 }

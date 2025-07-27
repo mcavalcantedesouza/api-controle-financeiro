@@ -10,7 +10,9 @@ import java.util.Set;
 @Table(name = "tbl_categories")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = {"userEntity", "transactionEntities"})
 @EqualsAndHashCode(of = "id")
 public class CategoryEntity {

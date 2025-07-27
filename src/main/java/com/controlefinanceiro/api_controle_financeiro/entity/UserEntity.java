@@ -15,7 +15,9 @@ import java.util.Set;
 @Table(name = "tbl_users")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = {"categories", "transactionEntities"})
 @EqualsAndHashCode(of = "id")
 public class UserEntity implements UserDetails {

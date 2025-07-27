@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @Table(name = "tbl_transactions")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString(exclude = {"userEntity", "categoryEntity"})
 @EqualsAndHashCode(of = "id")
 public class TransactionEntity {
@@ -28,7 +30,7 @@ public class TransactionEntity {
     private BigDecimal value;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "valueType", nullable = false)
+    @Column(name = "value_type", nullable = false)
     private TransactionType valueType;
 
     @Column(name = "date", nullable = false)
