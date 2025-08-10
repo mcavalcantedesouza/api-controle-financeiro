@@ -1,4 +1,5 @@
 package com.controlefinanceiro.api_controle_financeiro.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +34,7 @@ public class UserEntity implements UserDetails {
     private String email;
 
     @Column(name = "hash_password")
+    @JsonIgnore
     private String hashPassword;
 
     @Column(name = "initial_balance")

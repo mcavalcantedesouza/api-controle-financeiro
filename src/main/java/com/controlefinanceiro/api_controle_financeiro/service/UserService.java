@@ -80,7 +80,7 @@ public class UserService {
         repository.delete(currentUser);
     }
 
-    private UserEntity getAuthenticatedUser() {
+    UserEntity getAuthenticatedUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserEntity) {

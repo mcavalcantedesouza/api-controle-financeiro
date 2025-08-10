@@ -15,9 +15,9 @@ public interface TransactionMapper {
 
     @Mapping(source = "categoryEntity.id", target = "categoryId")
     @Mapping(source = "categoryEntity.name", target = "categoryName")
-    TransactionResponse toResponse(TransactionEntity entity);
+    TransactionResponse transactionEntityToTransactionResponse(TransactionEntity entity);
 
-    List<TransactionResponse> toResponseList(List<TransactionEntity> entities);
+    List<TransactionResponse> transactionEntityListToTransactionResponseList(List<TransactionEntity> entities);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userEntity", ignore = true)
